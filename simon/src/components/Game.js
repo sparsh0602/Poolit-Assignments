@@ -1,35 +1,47 @@
 import React, { useState } from 'react'
-
+import { addElement } from './actions';
+import { removeElement } from './actions';
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from 'react';
 export default function Game() {
-    let arr = [];
-    let level = 1;
+
+    const myState = useSelector(state => state.updateArray);
+    const dispatch = useDispatch();
+
     let count = 0;
     let on = false;
+    let level=1;
     const [score,setScore]=useState(1);
 
-
-
-    const gameEngine = () => {
-
-        document.querySelector('.scoreBoard').style.display="none";
-        document.querySelector('.gameResult').style.display="none";
-        arr.splice(0, arr.length);
-        setScore(1);
-  
-
+    const addDataArray=()=>{
         for (let i = 0; i < 20; i++) {
             const num = Math.floor((Math.random() * 4) + 1)
-            arr.push(num);
+            dispatch(addElement(num))
         }
+    }
+   useEffect(() => {
+       addDataArray();
+   }, [])
+   
+
+    const gameEngine = async() => {
+        console.log(myState);
+        document.querySelector('.scoreBoard').style.display="none";
+        document.querySelector('.gameResult').style.display="none";
+       
+        setScore(1);
+
+ 
         computerTurn();
     }
 
 
 
     const computerTurn = () => {
-        for (let i = 0; i < level; i++) {
+        
+        for (let i = 0; i < level ; i++) {
             setTimeout(function timer() {
-                const block = document.getElementById(arr[i]);
+                const block = document.getElementById(myState[i]);
                 block.style.border = '1vw solid black';
                 setTimeout(function timer2() {
                     block.style.border = 'none';
@@ -60,6 +72,10 @@ export default function Game() {
     }
 
     let order = [];
+    
+
+
+ 
     const check1 = () => {
         if(on===true)
         {
@@ -70,11 +86,18 @@ export default function Game() {
             topLeft.style.border = 'none';
         }, 500)
 
-        if (order[order.length - 1] === arr[order.length - 1]) {
+        if (order[order.length - 1] === myState[order.length - 1]) {
             console.log("correct");
             count += 1;
             if (count === level) {
-                level += 1;
+                setTimeout(() => {
+                    
+                    level+=1
+                }, 1000);
+
+                
+                
+                console.log(level);
                 on=false;
                 setTimeout(() => {
                     computerTurn();
@@ -85,7 +108,7 @@ export default function Game() {
             }
         }
         }
-        if (order[order.length - 1] !== arr[order.length - 1]) {
+        if (order[order.length - 1] !== myState[order.length - 1]) {
             document.querySelector('.scoreBoard').style.display="block";
             document.querySelector('.gameResult').style.display="flex";
             count = 0;
@@ -100,12 +123,11 @@ export default function Game() {
             topRight.style.border = 'none';
         }, 500)
 
-        if (order[order.length - 1] === arr[order.length - 1]) {
+        if (order[order.length - 1] === myState[order.length - 1]) {
             console.log("correct");
             count += 1;
             if (count === level) {
-                level += 1;
-
+                level+=1;
                 on=false;
                 setTimeout(() => {
                     computerTurn();
@@ -118,7 +140,7 @@ export default function Game() {
         }
 
         }
-        if (order[order.length - 1] !== arr[order.length - 1]) {
+        if (order[order.length - 1] !== myState[order.length - 1]) {
             document.querySelector('.scoreBoard').style.display="block";
             document.querySelector('.gameResult').style.display="flex";
             count = 0;
@@ -135,11 +157,11 @@ export default function Game() {
             bottomLeft.style.border = 'none';
         }, 500)
 
-        if (order[order.length - 1] === arr[order.length - 1]) {
+        if (order[order.length - 1] === myState[order.length - 1]) {
             console.log("correct");
             count += 1;
             if (count === level) {
-                level += 1;
+               level+=1;
                 on=false;
                 setTimeout(() => {
                     computerTurn();
@@ -151,7 +173,7 @@ export default function Game() {
             }
         }
         }
-        if (order[order.length - 1] !== arr[order.length - 1]) {
+        if (order[order.length - 1] !== myState[order.length - 1]) {
             document.querySelector('.scoreBoard').style.display="block";
             document.querySelector('.gameResult').style.display="flex";
             count = 0;
@@ -168,11 +190,11 @@ export default function Game() {
             bottomRight.style.border = 'none';
         }, 500)
 
-        if (order[order.length - 1] === arr[order.length - 1]) {
+        if (order[order.length - 1] === myState[order.length - 1]) {
             console.log("correct");
             count += 1;
             if (count === level) {
-                level += 1;
+                level+=1;
                 on=false;
                 setTimeout(() => {
                     computerTurn();
@@ -185,7 +207,7 @@ export default function Game() {
         }
 
         }
-        if (order[order.length - 1] !== arr[order.length - 1]) {
+        if (order[order.length - 1] !== myState[order.length - 1]) {
             document.querySelector('.scoreBoard').style.display="block";
             document.querySelector('.gameResult').style.display="flex";
             count = 0;
@@ -193,8 +215,9 @@ export default function Game() {
     }
 
     const startGame=()=>{
-        gameEngine();
+        addDataArray();
         document.getElementById("startButtonId").innerHTML="Start Again"
+        gameEngine();
     }
    
     return (
