@@ -1,11 +1,23 @@
 import './App.css';
-import Body from './components/Body';
-
+import LoginPage from './components/LoginPage/LoginPage'
+import HomePage from './components/HomePage/HomePage';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link
+} from "react-router-dom";
 function App() {
   return (
-    <div className="App">
-      <Body/>
-    </div>
+    <Router>
+ 
+        <div className="App">
+          <Routes>
+          <Route exact path="/" element={<LoginPage/>}/>
+          <Route exact path="/home" element={<HomePage/>}/>
+          </Routes>
+        </div>
+    </Router>
   );
 }
 
